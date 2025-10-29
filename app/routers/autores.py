@@ -5,7 +5,6 @@ from .. import crud, schemas, database, modelos
 
 router = APIRouter(prefix="/autores", tags=["Autores"])
 
-
 @router.post("/", response_model=schemas.Autor)
 def crear_autor(autor: schemas.AutorCreate, db: Session = Depends(database.get_db)):
     return crud.crear_autor(db=db, autor=autor)
