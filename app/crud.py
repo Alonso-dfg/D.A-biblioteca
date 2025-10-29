@@ -73,7 +73,6 @@ def actualizar_autor(db: Session, autor_id: int, autor: schemas.AutorCreate) -> 
         return _autor_to_schema(db_autor)
     return None
 
-
 def eliminar_autor(db: Session, autor_id: int) -> Optional[schemas.Autor]:
     db_autor = db.query(modelos.Autor).filter(modelos.Autor.id == autor_id).first()
     if db_autor:
