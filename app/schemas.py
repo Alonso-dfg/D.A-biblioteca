@@ -2,9 +2,14 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 
-#  ESQUEMAS BASE
+
+#       --Esquemas base (estructuras comunes)--
+
 
 class LibroBase(BaseModel):
+    """
+    Datos básicos de un libro.
+    """
     titulo: str
     ISBN: str
     anio_publicacion: int
@@ -15,6 +20,9 @@ class LibroBase(BaseModel):
 
 
 class AutorBase(BaseModel):
+    """
+    Datos básicos de un autor.
+    """
     nombre: str
     pais_origen: str
     anio_nacimiento: int
@@ -24,25 +32,31 @@ class AutorBase(BaseModel):
 
 
 
-# ESQUEMAS PARA CREAR
+#       --Esquemas para crear registros--
 
 
 class LibroCreate(LibroBase):
-    """Usado para crear un libro sin incluir autores todavía"""
+    """
+    Esquema para crear un libro (sin autores aún).
+    """
     pass
 
 
 class AutorCreate(AutorBase):
-    """Usado para crear un autor sin incluir libros todavía"""
+    """
+    Esquema para crear un autor (sin libros aún).
+    """
     pass
 
 
 
-# ESQUEMAS PARA LEER DATOS COMPLETOS
+#       --Esquemas para leer datos completos--
 
 
 class Libro(LibroBase):
-    """Devuelve la información de un libro junto con los IDs de sus autores"""
+    """
+    Representa un libro con su ID y lista de autores.
+    """
     id: int
     autores: Optional[List[str]] = None
 
@@ -52,7 +66,9 @@ class Libro(LibroBase):
 
 
 class Autor(AutorBase):
-    """Devuelve la información de un autor junto con los IDs de sus libros"""
+    """
+    Representa un autor con su ID y lista de libros.
+    """
     id: int
     libros: Optional[List[str]] = None
 
@@ -62,14 +78,14 @@ class Autor(AutorBase):
 
 
 
-# 🔹 ESQUEMA EXTENDIDO (para crear o actualizar libros con autores)
+#       --Esquema extendido (crear o actualizar con autores)--
 
 
 class LibroConAutores(LibroBase):
     """
-    Esquema extendido para crear o actualizar libros,
-    permitiendo especificar los IDs de los autores asociados.
+    Permite crear o actualizar un libro con IDs de autores asociados.
     """
     autor_ids: Optional[List[int]] = None  # IDs de autores
+
 
 
