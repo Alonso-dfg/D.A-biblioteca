@@ -45,7 +45,7 @@ class AutorCreate(AutorBase):
 class Libro(LibroBase):
     """Devuelve la información de un libro junto con los IDs de sus autores"""
     id: int
-    autores: Optional[List[int]] = None
+    autores: Optional[List[str]] = None
 
     class Config:
         orm_mode = True
@@ -55,7 +55,7 @@ class Libro(LibroBase):
 class Autor(AutorBase):
     """Devuelve la información de un autor junto con los IDs de sus libros"""
     id: int
-    libros: Optional[List[int]] = None
+    libros: Optional[List[str]] = None
 
     class Config:
         orm_mode = True

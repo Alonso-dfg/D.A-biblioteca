@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
-from .. import crud, schemas, database
+from .. import crud, schemas, database, modelos
 
 router = APIRouter(prefix="/autores", tags=["Autores"])
 
@@ -26,6 +26,22 @@ def actualizar_autor(autor_id: int, autor: schemas.AutorCreate, db: Session = De
     if not actualizado:
         raise HTTPException(status_code=404, detail="Autor no encontrado")
     return actualizado
+
+@router.get("/autores/{autor_id}/libros", response_model=List[schemas.Libro], tags=["Autores"])
+def obtener_libros_por_autor(autor_id: int, db: Session = Depends(database.get_db)):
+    """
+    Retorna todos los libros asociados a un autor específico.
+    """
+    autor = crud.obtener_autor(db, autor_id)
+    if not autor:
+        raise HTTPException(status_code=404, detail="Autor no encontrado")
+
+    # Consultar libros asociados al autor
+    libros = db.query(modelos.Libro).join(modelos.libros_autores).filter(
+        modelos.libros_autores.c.autor_id == autor_id
+    ).all()
+
+    return [crud._libro_to_schema(l) for l in libros]
 
 @router.delete("/{autor_id}", response_model=schemas.Autor)
 def eliminar_autor(autor_id: int, db: Session = Depends(database.get_db)):
