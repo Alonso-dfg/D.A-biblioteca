@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from .. import crud, schemas, database
+from .. import crud, schemas, database, modelos
 from pydantic import BaseModel, Field
 
 router = APIRouter(prefix="/libros", tags=["Libros"])
@@ -62,6 +62,18 @@ def actualizar_libro(libro_id: int, libro: schemas.LibroConAutores, db: Session 
         return actualizado
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/libros/{libro_id}/autores", response_model=List[schemas.Autor], tags=["Libros"])
+def obtener_autores_por_libro(libro_id: int, db: Session = Depends(database.get_db)):
+    """
+    Retorna todos los autores asociados a un libro específico.
+    """
+    libro = db.query(modelos.Libro).filter(modelos.Libro.id == libro_id).first()
+    if not libro:
+        raise HTTPException(status_code=404, detail="Libro no encontrado")
+
+    return [crud._autor_to_schema(a) for a in libro.autores]
 
 
 # ✅ Eliminar libro
