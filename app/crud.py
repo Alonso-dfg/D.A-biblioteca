@@ -31,9 +31,9 @@ def _libro_to_schema(l: modelos.Libro) -> schemas.Libro:
     )
 
 
-# =====================================================
-# 🔹 CRUD para AUTORES
-# =====================================================
+
+# CRUD PARA AUTORES
+
 
 def crear_autor(db: Session, autor: schemas.AutorCreate) -> schemas.Autor:
     db_autor = modelos.Autor(**autor.dict())

@@ -20,7 +20,7 @@ class LibroConAutores(BaseModel):
     class Config:
         orm_mode = True
 
-# ✅ Crear libro
+# Crear libro
 @router.post("/", response_model=schemas.Libro)
 def crear_libro(data: LibroConAutores, db: Session = Depends(database.get_db)):
     """
