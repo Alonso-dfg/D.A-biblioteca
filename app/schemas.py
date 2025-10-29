@@ -1,9 +1,8 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-# =====================================================
-# 🔹 ESQUEMAS BASE
-# =====================================================
+
+#  ESQUEMAS BASE
 
 class LibroBase(BaseModel):
     titulo: str
@@ -24,9 +23,9 @@ class AutorBase(BaseModel):
         orm_mode = True
 
 
-# =====================================================
-# 🔹 ESQUEMAS PARA CREAR
-# =====================================================
+
+# ESQUEMAS PARA CREAR
+
 
 class LibroCreate(LibroBase):
     """Usado para crear un libro sin incluir autores todavía"""
@@ -38,9 +37,9 @@ class AutorCreate(AutorBase):
     pass
 
 
-# =====================================================
-# 🔹 ESQUEMAS PARA LEER DATOS COMPLETOS
-# =====================================================
+
+# ESQUEMAS PARA LEER DATOS COMPLETOS
+
 
 class Libro(LibroBase):
     """Devuelve la información de un libro junto con los IDs de sus autores"""
@@ -62,9 +61,9 @@ class Autor(AutorBase):
         arbitrary_types_allowed = True
 
 
-# =====================================================
+
 # 🔹 ESQUEMA EXTENDIDO (para crear o actualizar libros con autores)
-# =====================================================
+
 
 class LibroConAutores(LibroBase):
     """

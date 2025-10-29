@@ -47,7 +47,6 @@ def obtener_autor(db: Session, autor_id: int) -> Optional[schemas.Autor]:
     autor = db.query(modelos.Autor).filter(modelos.Autor.id == autor_id).first()
     return _autor_to_schema(autor) if autor else None
 
-
 def obtener_autores(
     db: Session,
     pais: Optional[str] = None,

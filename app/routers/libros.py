@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 router = APIRouter(prefix="/libros", tags=["Libros"])
 
-# ✅ Modelo completo para crear libro con autores opcionales
+# Modelo completo para crear libro con autores opcionales
 class LibroConAutores(BaseModel):
     titulo: str
     ISBN: str

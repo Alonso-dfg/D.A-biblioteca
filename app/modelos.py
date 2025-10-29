@@ -10,6 +10,7 @@ libros_autores = Table(
     Column("autor_id", Integer, ForeignKey("autores.id", ondelete="CASCADE"), primary_key=True)
 )
 
+
 class Autor(Base):
     __tablename__ = "autores"
 

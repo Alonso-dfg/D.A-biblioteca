@@ -11,6 +11,7 @@ app = FastAPI(
     version="2.0"
 )
 
+
 @app.get("/")
 def root():
     return {"message": "Bienvenido a la API de Biblioteca"}
