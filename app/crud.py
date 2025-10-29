@@ -10,6 +10,7 @@ from . import modelos, schemas
 
 def _autor_to_schema(a: modelos.Autor) -> schemas.Autor:
     """Convierte un Autor ORM a schemas.Autor, mostrando los títulos de sus libros."""
+
     return schemas.Autor(
         id=a.id,
         nombre=a.nombre,
