@@ -1,19 +1,48 @@
-# Proyecto de API de Biblioteca
+# Sistema de Gestión de Biblioteca — FastAPI + SQLAlchemy + SQLite
 
-Este proyecto es una API RESTful para gestionar **autores** y **libros** utilizando **FastAPI** y **SQLAlchemy** con una base de datos SQLite. Permite realizar operaciones CRUD sobre autores y libros, y permite filtrar los autores por país y los libros por año de publicación.
+Este proyecto implementa una **API RESTful** para la **gestión de una biblioteca**, desarrollada con **FastAPI**, **SQLAlchemy** y **SQLite**.  
+Permite registrar, consultar, actualizar y eliminar **libros** y **autores**, manteniendo una relación *muchos a muchos* entre ambos.
+---
 
-## Requisitos
+## Requerimientos para este proyecto
+- fastapi
+- uvicorn
+- sqlalchemy
+- pydantic
 
-Para ejecutar este proyecto, necesitas tener las siguientes dependencias instaladas:
+---
 
-- **Python 3.7+**
-- **FastAPI**: Para crear la API.
-- **SQLAlchemy**: Para la manipulación de la base de datos.
-- **SQLite**: Base de datos usada para este proyecto (se crea automáticamente).
-- **Uvicorn**: Servidor ASGI para correr FastAPI.
-- **Pydantic**: Para validación de datos.
+## Características principales
 
-Puedes instalar las dependencias usando el archivo `requirements.txt`:
+CRUD completo para **Libros** y **Autores**  
+Relación **muchos-a-muchos** entre libros y autores  
+Validaciones automáticas con **Pydantic**  
+Persistencia con **SQLite**  
+Documentación automática con **Swagger UI** y **ReDoc**  
+Consultas avanzadas:
+- Obtener **libros de un autor**
+- Obtener **autores de un libro**
 
-```bash
-pip install -r requirements.txt
+---
+
+## Estructura del proyecto 
+
+```
+sistema-biblioteca/
+│
+├── app/
+│   ├── __init__.py
+│   ├── main.py                Punto de entrada principal (inicia FastAPI)
+│   ├── database.py            Configuración de la base de datos SQLite
+│   ├── modelos.py             Modelos SQLAlchemy: Libro, Autor y tabla intermedia
+│   ├── schemas.py             Esquemas Pydantic para validación y respuesta
+│   ├── crud.py                Lógica CRUD de la aplicación
+│   └── routers/
+│       ├── autores.py         Endpoints para gestionar autores
+│       └── libros.py          Endpoints para gestionar libros
+│
+├── requirements.txt           Dependencias del proyecto
+└── README.md                  Este archivo de documentación
+
+```
+
