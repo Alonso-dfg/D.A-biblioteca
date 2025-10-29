@@ -11,6 +11,7 @@ Permite registrar, consultar, actualizar y eliminar **libros** y **autores**, ma
 - pydantic
 
 ---
+
 ## Características principales
 
 CRUD completo para **Libros** y **Autores**  

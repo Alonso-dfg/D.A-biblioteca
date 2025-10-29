@@ -3,7 +3,11 @@ from sqlalchemy.orm import relationship
 from .database import Base
 
 
-#Tabla intermedia para la relación muchos-a-muchos
+
+#           --Tablas y modelos de la base de datos--
+
+
+# Tabla intermedia para la relación muchos a muchos entre libros y autores
 libros_autores = Table(
     "libros_autores",
     Base.metadata,
@@ -11,7 +15,11 @@ libros_autores = Table(
     Column("autor_id", Integer, ForeignKey("autores.id", ondelete="CASCADE"), primary_key=True)
 )
 
+
 class Autor(Base):
+    """
+    Representa a un autor dentro de la base de datos.
+    """
     __tablename__ = "autores"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -19,11 +27,14 @@ class Autor(Base):
     pais_origen = Column(String)
     anio_nacimiento = Column(Integer)
 
+    # Relación con los libros (muchos a muchos)
     libros = relationship("Libro", secondary=libros_autores, back_populates="autores")
 
 
-
 class Libro(Base):
+    """
+    Representa un libro dentro de la base de datos.
+    """
     __tablename__ = "libros"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -32,4 +43,6 @@ class Libro(Base):
     anio_publicacion = Column(Integer)
     copias_disponibles = Column(Integer)
 
+    # Relación con los autores (muchos a muchos)
     autores = relationship("Autor", secondary=libros_autores, back_populates="libros")
+
