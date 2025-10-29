@@ -4,7 +4,7 @@ from .database import Base
 
 
 
-#           --Tablas y modelos de la base de datos--
+#           --Tablas y modelos de la base de datos-
 
 
 # Tabla intermedia para la relación muchos a muchos entre libros y autores

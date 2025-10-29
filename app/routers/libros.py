@@ -4,10 +4,20 @@ from typing import List, Optional
 from .. import crud, schemas, database, modelos
 from pydantic import BaseModel, Field
 
+
+#       --Rutas para gestionar libros--
+
+
 router = APIRouter(prefix="/libros", tags=["Libros"])
 
-# Modelo completo para crear libro con autores opcionales
+
+
+# Modelo extendido para crear o actualizar libros
+
 class LibroConAutores(BaseModel):
+    """
+    Modelo para crear libros con la opción de agregar IDs de autores.
+    """
     titulo: str
     ISBN: str
     anio_publicacion: int
@@ -20,11 +30,13 @@ class LibroConAutores(BaseModel):
     class Config:
         orm_mode = True
 
+
 # Crear libro
+
 @router.post("/", response_model=schemas.Libro)
 def crear_libro(data: LibroConAutores, db: Session = Depends(database.get_db)):
     """
-    Crea un libro y lo asocia con uno o varios autores si se proporcionan sus IDs.
+    Crea un libro y lo asocia con autores si se proporcionan sus IDs.
     """
     try:
         autor_ids = data.autor_ids or []
@@ -32,7 +44,9 @@ def crear_libro(data: LibroConAutores, db: Session = Depends(database.get_db)):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-# ✅ Obtener todos los libros
+
+# Obtener todos los libros
+
 @router.get("/", response_model=List[schemas.Libro])
 def obtener_libros(
     anio_publicacion: Optional[int] = None,
@@ -40,21 +54,34 @@ def obtener_libros(
     limit: int = 100,
     db: Session = Depends(database.get_db)
 ):
+    """
+    Lista todos los libros o los filtra por año de publicación.
+    """
     if anio_publicacion:
         return crud.obtener_libros_por_anio(db, anio_publicacion, skip, limit)
     return crud.obtener_libros(db, skip, limit)
 
-# ✅ Obtener libro por ID
+
+# Obtener libro por ID
+
 @router.get("/{libro_id}", response_model=schemas.Libro)
 def obtener_libro(libro_id: int, db: Session = Depends(database.get_db)):
+    """
+    Busca un libro por su ID.
+    """
     libro = crud.obtener_libro(db, libro_id)
     if not libro:
         raise HTTPException(status_code=404, detail="Libro no encontrado")
     return libro
 
-# ✅ Actualizar libro
+
+# Actualizar libro
+
 @router.put("/libros/{libro_id}", response_model=schemas.Libro, tags=["Libros"])
 def actualizar_libro(libro_id: int, libro: schemas.LibroConAutores, db: Session = Depends(database.get_db)):
+    """
+    Actualiza la información de un libro existente.
+    """
     try:
         actualizado = crud.actualizar_libro(db=db, libro_id=libro_id, libro_data=libro)
         if not actualizado:
@@ -64,10 +91,12 @@ def actualizar_libro(libro_id: int, libro: schemas.LibroConAutores, db: Session 
         raise HTTPException(status_code=400, detail=str(e))
 
 
+# Obtener autores de un libro
+
 @router.get("/libros/{libro_id}/autores", response_model=List[schemas.Autor], tags=["Libros"])
 def obtener_autores_por_libro(libro_id: int, db: Session = Depends(database.get_db)):
     """
-    Retorna todos los autores asociados a un libro específico.
+    Muestra los autores asociados a un libro específico.
     """
     libro = db.query(modelos.Libro).filter(modelos.Libro.id == libro_id).first()
     if not libro:
@@ -76,11 +105,16 @@ def obtener_autores_por_libro(libro_id: int, db: Session = Depends(database.get_
     return [crud._autor_to_schema(a) for a in libro.autores]
 
 
-# ✅ Eliminar libro
+# Eliminar libro
+
 @router.delete("/{libro_id}", response_model=schemas.Libro)
 def eliminar_libro(libro_id: int, db: Session = Depends(database.get_db)):
+    """
+    Elimina un libro de la base de datos.
+    """
     eliminado = crud.eliminar_libro(db, libro_id)
     if not eliminado:
         raise HTTPException(status_code=404, detail="Libro no encontrado")
     return eliminado
+
 
