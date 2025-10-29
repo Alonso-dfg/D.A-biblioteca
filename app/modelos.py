@@ -2,14 +2,14 @@ from sqlalchemy import Column, Integer, String, Table, ForeignKey
 from sqlalchemy.orm import relationship
 from .database import Base
 
-# Tabla intermedia para la relación muchos-a-muchos
+
+#Tabla intermedia para la relación muchos-a-muchos
 libros_autores = Table(
     "libros_autores",
     Base.metadata,
     Column("libro_id", Integer, ForeignKey("libros.id", ondelete="CASCADE"), primary_key=True),
     Column("autor_id", Integer, ForeignKey("autores.id", ondelete="CASCADE"), primary_key=True)
 )
-
 
 class Autor(Base):
     __tablename__ = "autores"
