@@ -70,6 +70,21 @@ sistema-biblioteca/
     ````
    uvicorn app.main:app --reload
    ````
+___
+## Endpoints principales
+| Recurso | Método | Ruta | Descripción |
+|----------|--------|------|-------------|
+| Libros | GET | `/libros/` | Lista todos los libros |
+| Libros | POST | `/libros/` | Crea un nuevo libro |
+| Autores | GET | `/autores/` | Lista todos los autores |
+| Autores | POST | `/autores/` | Crea un nuevo autor |
+___
+## Reglas del negocio
+- No se puede eliminar un libro que tenga copias disponibles (`> 0`).
+- No se puede registrar un libro con número negativo de copias.
+- Los autores deben existir antes de asociarlos a un libro.
+- Un ISBN no puede repetirse (único por libro).
+- Los libros y autores tienen relación *muchos a muchos*.
    
 
 
