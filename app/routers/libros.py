@@ -87,7 +87,7 @@ def obtener_libro(libro_id: int, db: Session = Depends(database.get_db)):
     return libro
 
 
-# ✏️ ACTUALIZAR LIBRO
+# ACTUALIZAR LIBRO
 
 @router.put("/libros/{libro_id}", response_model=schemas.Libro, tags=["Libros"])
 def actualizar_libro(libro_id: int, libro: schemas.LibroUpdate, db: Session = Depends(database.get_db)):
@@ -110,7 +110,7 @@ def actualizar_libro(libro_id: int, libro: schemas.LibroUpdate, db: Session = De
         raise HTTPException(status_code=400, detail=str(e))
 
 
-# 👨‍🏫 OBTENER AUTORES DE UN LIBRO
+# OBTENER AUTORES DE UN LIBRO
 
 @router.get("/libros/{libro_id}/autores", response_model=List[schemas.Autor], tags=["Libros"])
 def obtener_autores_por_libro(libro_id: int, db: Session = Depends(database.get_db)):
@@ -124,7 +124,7 @@ def obtener_autores_por_libro(libro_id: int, db: Session = Depends(database.get_
     return [crud._autor_to_schema(a) for a in libro.autores]
 
 
-# ❌ ELIMINAR LIBRO
+# ELIMINAR LIBRO
 
 @router.delete("/libros/{libro_id}", response_model=schemas.Libro, tags=["Libros"])
 def eliminar_libro(libro_id: int, db: Session = Depends(database.get_db)):
