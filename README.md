@@ -76,8 +76,10 @@ ___
 |----------|--------|------|-------------|
 | Libros | GET | `/libros/` | Lista todos los libros |
 | Libros | POST | `/libros/` | Crea un nuevo libro |
+| Libros | GET | `/libros/{libro_id}` | Devuelve la información de un libro específico. |
 | Autores | GET | `/autores/` | Lista todos los autores |
 | Autores | POST | `/autores/` | Crea un nuevo autor |
+| Autores | GET | `/autores/{autor_id}` | Devuelve la información de un autor específico. |
 ___
 ## Reglas del negocio
 - No se puede eliminar un libro que tenga copias disponibles (`> 0`).
