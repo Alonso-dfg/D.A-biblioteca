@@ -3,12 +3,11 @@ from typing import List, Optional
 
 
 
-#       --Esquemas base (estructuras comunes)--
-
+# ESQUEMAS BASE (estructuras comunes)
 
 class LibroBase(BaseModel):
     """
-    Datos básicos de un libro.
+    Representa los datos básicos de un libro.
     """
     titulo: str
     ISBN: str
@@ -16,12 +15,12 @@ class LibroBase(BaseModel):
     copias_disponibles: int
 
     class Config:
-        orm_mode = True
+        orm_mode = True  # Permite convertir datos del ORM a este modelo
 
 
 class AutorBase(BaseModel):
     """
-    Datos básicos de un autor.
+    Representa los datos básicos de un autor.
     """
     nombre: str
     pais_origen: str
@@ -32,33 +31,31 @@ class AutorBase(BaseModel):
 
 
 
-#       --Esquemas para crear registros--
-
+# ESQUEMAS PARA CREAR REGISTROS
 
 class LibroCreate(LibroBase):
     """
-    Esquema para crear un libro (sin autores aún).
+    Se usa para crear un libro (sin autores todavía).
     """
     pass
 
 
 class AutorCreate(AutorBase):
     """
-    Esquema para crear un autor (sin libros aún).
+    Se usa para crear un autor (sin libros todavía).
     """
     pass
 
 
 
-#       --Esquemas para leer datos completos--
-
+# ESQUEMAS PARA LEER REGISTROS COMPLETOS
 
 class Libro(LibroBase):
     """
-    Representa un libro con su ID y lista de autores.
+    Muestra un libro con su ID y los autores que tiene.
     """
     id: int
-    autores: Optional[List[str]] = None
+    autores: Optional[List[str]] = None  # Solo los nombres de autores
 
     class Config:
         orm_mode = True
@@ -67,25 +64,37 @@ class Libro(LibroBase):
 
 class Autor(AutorBase):
     """
-    Representa un autor con su ID y lista de libros.
+    Muestra un autor con su ID y los libros que escribió.
     """
     id: int
-    libros: Optional[List[str]] = None
+    libros: Optional[List[str]] = None  # Solo los títulos de libros
 
     class Config:
         orm_mode = True
         arbitrary_types_allowed = True
 
 
-
-#       --Esquema extendido (crear o actualizar con autores)--
-
+# ESQUEMAS EXTENDIDOS (crear o actualizar con autores)
 
 class LibroConAutores(LibroBase):
     """
-    Permite crear o actualizar un libro con IDs de autores asociados.
+    Permite crear o actualizar un libro indicando los IDs de los autores.
     """
-    autor_ids: Optional[List[int]] = None  # IDs de autores
+    autor_ids: Optional[List[int]] = None  # IDs de autores existentes
 
+
+class LibroUpdate(BaseModel):
+    """
+    Se usa para actualizar un libro.
+    Todos los campos son opcionales, así puedes cambiar solo uno.
+    """
+    titulo: Optional[str] = None
+    ISBN: Optional[str] = None
+    anio_publicacion: Optional[int] = None
+    copias_disponibles: Optional[int] = None
+    autor_ids: Optional[List[int]] = None  # IDs de autores nuevos (opcional)
+
+    class Config:
+        orm_mode = True
 
 

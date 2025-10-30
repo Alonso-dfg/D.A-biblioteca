@@ -230,51 +230,70 @@ def obtener_libro(db: Session, libro_id: int) -> Optional[schemas.Libro]:
 
 def actualizar_libro(db: Session, libro_id: int, libro_data) -> Optional[schemas.Libro]:
     """
-    Actualiza un libro existente, incluyendo los autores asociados si se especifican nuevos IDs.
-    Args:
-        db (Session): Sesión de la base de datos.
-        libro_id (int): ID del libro a actualizar.
-        libro_data (schemas.LibroUpdate): Nuevos datos del libro.
-    Raises:
-        ValueError: Si no se encuentran los autores indicados.
-    Returns:
-        Optional[schemas.Libro]: Libro actualizado o None si no existe.
+    Actualiza un libro por su ID.
+    - No permite que las copias sean negativas.
+    - Permite cambiar los autores si se envían nuevos IDs.
     """
+    # Buscar el libro
     db_libro = db.query(modelos.Libro).filter(modelos.Libro.id == libro_id).first()
     if not db_libro:
         return None
 
-    data = libro_data.dict(exclude_unset=True, exclude={"autor_ids"})
+    # Validar que las copias no sean negativas
+    if hasattr(libro_data, "copias_disponibles") and libro_data.copias_disponibles is not None:
+        if libro_data.copias_disponibles < 0:
+            raise ValueError("Las copias disponibles no pueden ser negativas.")
 
-    for key, value in data.items():
-        setattr(db_libro, key, value)
+    # Actualizar los datos básicos del libro
+    db_libro.titulo = libro_data.titulo
+    db_libro.ISBN = libro_data.ISBN
+    db_libro.anio_publicacion = libro_data.anio_publicacion
+    db_libro.copias_disponibles = libro_data.copias_disponibles
 
-    if hasattr(libro_data, "autor_ids") and libro_data.autor_ids is not None:
+    # Si se mandan autores nuevos, los actualiza
+    if hasattr(libro_data, "autor_ids") and libro_data.autor_ids:
         autores = db.query(modelos.Autor).filter(modelos.Autor.id.in_(libro_data.autor_ids)).all()
-        if not autores and libro_data.autor_ids:
+        if not autores:
             raise ValueError("No se encontraron autores con los IDs proporcionados.")
         db_libro.autores = autores
 
+    # Guardar los cambios
     db.commit()
     db.refresh(db_libro)
+
     return _libro_to_schema(db_libro)
+
 
 
 def eliminar_libro(db: Session, libro_id: int) -> Optional[schemas.Libro]:
     """
     Elimina un libro de la base de datos por su ID.
+
+    Validación:
+        - No permite eliminar un libro si aún tiene copias disponibles (> 0).
+        - Solo se puede eliminar si copias_disponibles == 0.
+
     Args:
         db (Session): Sesión de la base de datos.
         libro_id (int): ID del libro a eliminar.
+
     Returns:
         Optional[schemas.Libro]: Libro eliminado o None si no existe.
+
+    Raises:
+        ValueError: Si el libro tiene copias disponibles mayores que cero.
     """
     db_libro = db.query(modelos.Libro).filter(modelos.Libro.id == libro_id).first()
     if db_libro:
+        # Validación: impedir eliminar si aún hay copias disponibles
+        if db_libro.copias_disponibles > 0:
+            raise ValueError("No se puede eliminar un libro que aún tiene copias disponibles.")
+
         resultado = _libro_to_schema(db_libro)
         db.delete(db_libro)
         db.commit()
         return resultado
     return None
+
 
 

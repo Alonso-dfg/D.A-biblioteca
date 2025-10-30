@@ -4,11 +4,12 @@ Este proyecto implementa una **API RESTful** para la **gestión de una bibliotec
 Permite registrar, consultar, actualizar y eliminar **libros** y **autores**, manteniendo una relación *muchos a muchos* entre ambos.
 ---
 
-## Requerimientos para este proyecto
-- fastapi
-- uvicorn
-- sqlalchemy
-- pydantic
+## Tecnologias utilizadas Python 3.10+
+- FastAPI
+- SQLAlchemy
+- Pydantic
+- Uvicorn
+- SQLite (Base de datos)
 
 ---
 
@@ -20,8 +21,8 @@ Validaciones automáticas con **Pydantic**
 Persistencia con **SQLite**  
 Documentación automática con **Swagger UI** y **ReDoc**  
 Consultas avanzadas:
-- Obtener **libros de un autor**
-- Obtener **autores de un libro**
+- Obtener libros de un autor
+- Obtener autores de un libro
 
 ---
 
@@ -45,4 +46,30 @@ sistema-biblioteca/
 └── README.md                  Este archivo de documentación
 
 ```
+---
+
+## Instalación y ejecución
+1. **Clonar el repositorio**
+    ````
+   git clone https://github.com/Alonso-dfg/D.A-biblioteca
+   cd D.A-biblioteca
+   ````
+
+2. **Crear entorno virtual**
+    ````
+   python -m venv venv
+   venv/scripts/activate  #En windows
+   source venv/bin/activate   #En Linux 
+   ````
+
+3. **Instalar dependencias**
+    ````
+   pip install -r requirements.txt
+    ````
+4. **Ejecutar el servidor**
+    ````
+   uvicorn app.main:app --reload
+   ````
+   
+
 
