@@ -191,7 +191,7 @@ lo que significa que:
 - Un **libro puede tener varios autores**.  
 - Un **autor puede haber escrito varios libros**.
 
-### 📘 Clase `Libro`
+### Clase `Libro`
 Ubicación: `modelos.py`
 
 ```python
